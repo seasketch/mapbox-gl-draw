@@ -101,7 +101,9 @@ export default function(ctx) {
     }
 
     currentMode.touchmove(event);
-    return events.touchdrag(event);
+    if (event.points.length === 1) {
+      return events.touchdrag(event);
+    }
   };
 
   events.touchend = function(event) {
