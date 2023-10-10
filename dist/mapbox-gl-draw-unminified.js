@@ -1460,12 +1460,19 @@ function events(ctx) {
   events.touchend = function(event) {
     // Prevent emulated mouse events because we will fully handle the touch here.
     // This does not stop the touch events from propogating to mapbox though.
-    event.originalEvent.preventDefault();
     if (!ctx.options.touchEnabled) {
       return;
     }
 
     var target = featuresAt.touch(event, null, ctx)[0];
+
+    // If there are no mapbox targets nearby, let the event propagate through
+    if (!target && currentModeName === 'simple_select') {
+      return;
+    }
+
+    event.originalEvent.preventDefault();
+
     event.featureTarget = target;
     if (isTap(touchStartInfo, {
       time: new Date().getTime(),
